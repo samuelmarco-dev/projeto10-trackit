@@ -1,9 +1,19 @@
+import Header from "./Header";
+import TelaInicial from "./TelaInicial";
+import TelaCadastro from "./TelaCadastro";
+import TelaHabitos from "./TelaHabitos";
+
+
 import "./../assets/css/reset.css";
-import "./../assets/css/style.css";
 
 function App() {
-    return ( 
-        <></> 
+    return (
+        <>
+            <Header />
+            <TelaInicial />
+            <TelaCadastro /> 
+            <TelaHabitos />
+        </> 
     );
 }
 
