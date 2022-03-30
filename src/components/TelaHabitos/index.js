@@ -1,12 +1,11 @@
 import Paragrafo from '../utils/Paragrafo';
 import Botao from '../utils/Botao';
+import Footer from '../Footer';
 
 import {Container} from './style';
 
 import {BsTrash} from 'react-icons/bs';
 
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
 
 function TelaHabitos() {
     const arrayDias = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
@@ -44,7 +43,7 @@ function TelaHabitos() {
                     </div>
 
                     <div className='habitos-criados'>
-                        <p className='topo-habito'>Ler 1 capítulo de livro</p>
+                        <Paragrafo classe="topo-habito" conteudo="Ler 1 capítulo de livro" />
                             {gerarDiasSemana()}
                         <figure>
                             <BsTrash className='icon'/>
@@ -53,23 +52,7 @@ function TelaHabitos() {
                 </article>
                 <Paragrafo classe='habito-ausente' conteudo='Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!' />
             </nav> 
-            <footer>
-                <Paragrafo conteudo='Hábitos' />
-                <div>
-                <CircularProgressbar className='progressbar'
-                    value={60}
-                    text="Hoje"
-                    background
-                    backgroundPadding={6}
-                    styles={buildStyles({
-                    backgroundColor: "rgba(82, 182, 255, 1)",
-                    textColor: "#fff",
-                    pathColor: "#fff",
-                    trailColor: "transparent"
-                    })} />
-                </div>
-                <Paragrafo conteudo='Histórico' />
-            </footer>
+            <Footer texto="Hoje" progresso={50}/>
         </Container>
     );
 }

@@ -1,48 +1,30 @@
 import Paragrafo from '../utils/Paragrafo';
+import Footer from '../Footer';
 
 import { Container } from "./style";
 
 import { ImCheckboxChecked } from 'react-icons/im';
 
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-
 function HabitosHoje() {
     return ( 
         <Container>
             <div className='topo-container'>
-                <p className="data">Segunda, 17/05</p>
-                <p className="progresso-dia">Nenhum hábito concluído ainda</p>
+                <Paragrafo classe="data" conteudo="Segunda, 17/05" />
+                <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />
             </div>
             <article>
                 <div className='painel-habitosHoje'>
                     <div className="descricao">
-                        <p id="habito">Ler 1 capítulo de livro</p>
-                        <p id="sequencia">Sequência atual: 3 dias</p>
-                        <p id="recorde">Seu recorde: 5 dias</p>
+                        <Paragrafo classe="habito" conteudo="Ler 1 capítulo de livro" />
+                        <Paragrafo classe="sequencia" conteudo="Sequência atual: 3 dias" />
+                        <Paragrafo classe="recorde" conteudo="Seu recorde: 5 dias" />
                     </div>
                     <figure>
                         <ImCheckboxChecked className="icon"/>
                     </figure>
                 </div>
             </article>
-            <footer>
-                <Paragrafo conteudo='Hábitos' />
-                <div>
-                <CircularProgressbar className='progressbar'
-                    value={60}
-                    text="Hoje"
-                    background
-                    backgroundPadding={6}
-                    styles={buildStyles({
-                    backgroundColor: "rgba(82, 182, 255, 1)",
-                    textColor: "#fff",
-                    pathColor: "#fff",
-                    trailColor: "transparent"
-                    })} />
-                </div>
-                <Paragrafo conteudo='Histórico' />
-            </footer>
+            <Footer texto="Hoje" progresso={50}/>
         </Container>
     );
 }

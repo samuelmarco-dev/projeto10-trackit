@@ -61,6 +61,7 @@ export const Container = styled.section`
         height: auto;
         max-height: 100px;
         padding: 0 15px;
+        overflow: hidden;
     }
 
     article .painel-habitosHoje .descricao p{
@@ -70,7 +71,7 @@ export const Container = styled.section`
         overflow: hidden;
     }
 
-    article .painel-habitosHoje .descricao p#habito {
+    article .painel-habitosHoje .descricao p.habito {
         width: auto;
         height: auto;
         max-height: 45px;
@@ -80,15 +81,15 @@ export const Container = styled.section`
         margin-bottom: 8px;
     }
 
-    article .painel-habitosHoje .descricao p#sequencia, 
-    article .painel-habitosHoje .descricao p#recorde {
+    article .painel-habitosHoje .descricao p.sequencia, 
+    article .painel-habitosHoje .descricao p.recorde {
         width: auto;
         height: 15px;
         font-size: 13px;
         line-height: 16px;
     }
 
-    article .painel-habitosHoje .descricao p#recorde {
+    article .painel-habitosHoje .descricao p.recorde {
         margin-top: 3px;
         margin-bottom: 15px;
     }
