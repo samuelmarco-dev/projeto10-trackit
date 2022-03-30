@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import ContextToken from '../contexts/Token';
+import ContextUsuario from '../contexts/Usuario';
 
 import Paragrafo from '../utils/Paragrafo';
 import Botao from '../utils/Botao';
 import Footer from '../Footer';
-
 
 import {Container} from './style';
 
@@ -18,6 +18,9 @@ function TelaHabitos() {
     if(tokenUsuario !== null) {
         console.log(tokenUsuario);
     }
+
+    const {usuario} = useContext(ContextUsuario);
+    console.log(usuario);
     
     function gerarDiasSemana(){
         return (

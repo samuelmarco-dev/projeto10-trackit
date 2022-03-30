@@ -15,12 +15,14 @@ import TrackIt from "./../../assets/img/logo-TrackIt.jpg";
 
 function TelaInicial() {
     const arrayInput = ['email', 'senha'];
+
+    const [disable, setDisable] = useState(false);
     const [dadosEntrada, setDadosEntrada] = useState({
         email: '', password: ''
     });
 
     const navigate = useNavigate();
-    const { usuario } = useContext(ContextUsuario);
+    const { usuario, setUsuario } = useContext(ContextUsuario);
     const { setTokenUsuario } = useContext(ContextToken);
     
     if(usuario !== null) {
@@ -29,23 +31,20 @@ function TelaInicial() {
 
     function postarDadosLogin(event) {
         event.preventDefault();
-        console.log(dadosEntrada);
         const promise = postLogin(dadosEntrada);
         promise.then(response => {
-            console.log(response, response.data);
+            console.log(response.data);
+            setDisable(true);
+            setUsuario(response.data);
             setTokenUsuario(response.data.token);
             localStorage.setItem('token', response.data.token);
-            navigate('/habitos');
-            // if (response.data.status === 'success') {
-            //     localStorage.setItem('token', response.data.token);
-            //     localStorage.setItem('user', response.data.user);
-            //     window.location.href = '/home';
-            // } else {
-            //     alert('Usuário ou senha inválidos');
-            // }
+            navigate('/hoje');
         })
-        .catch(error => {
-            swal("Error, please try again!");
+        .catch((error) => {
+            swal(`Error ${error.response.status}, please try again!`);
+            setDadosEntrada({
+                email: '', password: ''
+            });
         });
     }
 
@@ -57,14 +56,14 @@ function TelaInicial() {
                 </figure>
                 <form onSubmit={postarDadosLogin}>
                     <div className="inputs">
-                        <input type="text" placeholder={arrayInput[0]} value={dadosEntrada.email} required
+                        <input type="text" placeholder={arrayInput[0]} value={dadosEntrada.email} required disabled={disable} 
                         onChange={(e)=>setDadosEntrada({...dadosEntrada, email: e.target.value})}/>
 
-                        <input type="password" placeholder={arrayInput[1]} value={dadosEntrada.senha} required
+                        <input type="password" placeholder={arrayInput[1]} value={dadosEntrada.password} required disabled={disable}
                         onChange={(e)=>setDadosEntrada({...dadosEntrada, password: e.target.value})}/>
                     </div>
                     <div className="botao">
-                        <Botao conteudo="Entrar" tipo="submit" />
+                        <Botao conteudo="Entrar" tipo="submit" disabled={disable}/>
                     </div>
                 </form>
                 <Link to="/cadastro">

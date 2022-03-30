@@ -13,6 +13,8 @@ import { Container } from "./style";
 
 function TelaCadastro() {
     const arrayInput = ['email', 'senha', 'nome', 'foto'];
+    
+    const [disable, setDisable] = useState(false);
     const [dadosCadastro, setDadosCadastro] = useState({
         email: '', name: '', image: '', password: '' 
     });
@@ -22,24 +24,16 @@ function TelaCadastro() {
 
     function postarDadosCadastro(event) {
         event.preventDefault();
-        console.log(dadosCadastro);
-
+        
         const promise = postCadastro(dadosCadastro);
         promise.then(response => {
-            console.log(response, response.data);
+            console.log(response.data);
+            setDisable(true);
             setUsuario(response.data);
-            localStorage.setItem('image', response.data.image);
             navigate('/');
-            // if (response.data.status === 'success') {
-            //     localStorage.setItem('token', response.data.token);
-            //     localStorage.setItem('user', response.data.user);
-            //     window.location.href = '/';
-            // } else {
-            //     alert('Usuário ou senha inválidos');
-            // }
         })
-        .catch(error => {
-            swal("Error, please try again!");
+        .catch((error) => {
+            swal(`Error ${error.response.status}, please try again!`);
             setDadosCadastro({
                 email: '', name: '', image: '', password: ''
             });
@@ -54,20 +48,20 @@ function TelaCadastro() {
             </figure>
             <form onSubmit={postarDadosCadastro}>
                 <div className="inputs">
-                    <input type="text" placeholder={arrayInput[0]} value={dadosCadastro.email} required
+                    <input type="text" placeholder={arrayInput[0]} value={dadosCadastro.email} required disabled={disable} 
                     onChange={(e)=>setDadosCadastro({...dadosCadastro, email: e.target.value})}/>
 
-                    <input type="password" placeholder={arrayInput[1]} value={dadosCadastro.password} required
+                    <input type="password" placeholder={arrayInput[1]} value={dadosCadastro.password} required disabled={disable}
                     onChange={(e)=>setDadosCadastro({...dadosCadastro, password: e.target.value})}/>
 
-                    <input type="text" placeholder={arrayInput[2]} value={dadosCadastro.name} required
+                    <input type="text" placeholder={arrayInput[2]} value={dadosCadastro.name} required disabled={disable}
                     onChange={(e)=>setDadosCadastro({...dadosCadastro, name: e.target.value})}/>
 
-                    <input type="text" placeholder={arrayInput[3]} value={dadosCadastro.image} required
+                    <input type="text" placeholder={arrayInput[3]} value={dadosCadastro.image} required disabled={disable}
                     onChange={(e)=>setDadosCadastro({...dadosCadastro, image: e.target.value})}/>
                 </div>
                 <div className="botao">
-                    <Botao conteudo="Cadastrar" tipo="submit" />
+                    <Botao conteudo="Cadastrar" tipo="submit" disabled={disable}/>
                 </div>
             </form>
             <Link to="/">
@@ -80,10 +74,3 @@ function TelaCadastro() {
 }
 
 export default TelaCadastro;
-
-// eslint-disable-next-line no-lone-blocks
-{/*
-    {arrayInput.map((item, index) => { 
-        return <input key={index} type="text" placeholder={item} />
-    })}
-*/}
