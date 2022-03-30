@@ -1,28 +1,30 @@
-/*import axios from "axios";
-
-    --------------------------------------------------
-    estrutura:
-    const url = "http://localhost:3000/api/";
-
-    function getData(url) {
-        return axios.get(url);
+/*
+const urlHabitos = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits'
+const config = {
+    headers: {
+        Authorization: `Bearer ${token}`
     }
+}
 
-    function postData(url, data) {
-        return axios.post(url, data);
-    }
+function listarHabitos() {
+    return axios.get(`${urlEntrada}/`, config );
+}
 
-    export { getData, postData };
-
-    ---------------------------------------------------
-    chamada:
-    import { getData, postData } from "./dataAxios";
-
-    getData(url)
-    .then(response => {})
-    .catch(error => {});
-
-    postData(url, data)
-    .then(response => {})
-    .catch(error => {});
+function criarHabito(objetoHabito) {
+    return axios.post(`${urlHabitos}`, objetoHabito, config );
+}
 */
+   
+import axios from "axios";
+   
+const urlEntrada = 'https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth'
+
+function postCadastro ( objetoCadastro ) {
+    return axios.post(`${urlEntrada}/sign-up`, objetoCadastro );
+}
+
+function postLogin( objetoLogin ) { 
+    return axios.post(`${urlEntrada}/login`, objetoLogin );
+}
+
+export { postLogin, postCadastro };

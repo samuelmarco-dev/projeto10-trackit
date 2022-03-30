@@ -1,6 +1,10 @@
+import { useContext } from 'react';
+import ContextToken from '../contexts/Token';
+
 import Paragrafo from '../utils/Paragrafo';
 import Botao from '../utils/Botao';
 import Footer from '../Footer';
+
 
 import {Container} from './style';
 
@@ -9,6 +13,11 @@ import {BsTrash} from 'react-icons/bs';
 
 function TelaHabitos() {
     const arrayDias = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+
+    const {tokenUsuario} = useContext(ContextToken);
+    if(tokenUsuario !== null) {
+        console.log(tokenUsuario);
+    }
     
     function gerarDiasSemana(){
         return (

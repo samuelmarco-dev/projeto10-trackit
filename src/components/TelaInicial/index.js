@@ -1,3 +1,11 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useContext } from 'react';
+import { postLogin } from "../services/dataAxios"; 
+import swal from "sweetalert";
+
+import ContextUsuario from "../contexts/Usuario";
+import ContextToken from "../contexts/Token";
+
 import Botao from "../utils/Botao";
 import Paragrafo from "../utils/Paragrafo";
 
@@ -7,6 +15,39 @@ import TrackIt from "./../../assets/img/logo-TrackIt.jpg";
 
 function TelaInicial() {
     const arrayInput = ['email', 'senha'];
+    const [dadosEntrada, setDadosEntrada] = useState({
+        email: '', password: ''
+    });
+
+    const navigate = useNavigate();
+    const { usuario } = useContext(ContextUsuario);
+    const { setTokenUsuario } = useContext(ContextToken);
+    
+    if(usuario !== null) {
+        console.log(usuario);
+    }
+
+    function postarDadosLogin(event) {
+        event.preventDefault();
+        console.log(dadosEntrada);
+        const promise = postLogin(dadosEntrada);
+        promise.then(response => {
+            console.log(response, response.data);
+            setTokenUsuario(response.data.token);
+            localStorage.setItem('token', response.data.token);
+            navigate('/habitos');
+            // if (response.data.status === 'success') {
+            //     localStorage.setItem('token', response.data.token);
+            //     localStorage.setItem('user', response.data.user);
+            //     window.location.href = '/home';
+            // } else {
+            //     alert('Usuário ou senha inválidos');
+            // }
+        })
+        .catch(error => {
+            swal("Error, please try again!");
+        });
+    }
 
     if(arrayInput.length > 0) {
         return (
@@ -14,14 +55,21 @@ function TelaInicial() {
                 <figure>
                     <img src={TrackIt} alt="Logo TrackIt"/>
                 </figure>
-                <div className="inputs">
-                    <input type="text" placeholder={arrayInput[0]} />
-                    <input type="password" placeholder={arrayInput[1]} />
-                </div>
-                <div className="botao">
-                    <Botao conteudo="Entrar" tipo="submit" />
-                </div>
-                <Paragrafo conteudo="Não tem uma conta? Cadastre-se!" />
+                <form onSubmit={postarDadosLogin}>
+                    <div className="inputs">
+                        <input type="text" placeholder={arrayInput[0]} value={dadosEntrada.email} required
+                        onChange={(e)=>setDadosEntrada({...dadosEntrada, email: e.target.value})}/>
+
+                        <input type="password" placeholder={arrayInput[1]} value={dadosEntrada.senha} required
+                        onChange={(e)=>setDadosEntrada({...dadosEntrada, password: e.target.value})}/>
+                    </div>
+                    <div className="botao">
+                        <Botao conteudo="Entrar" tipo="submit" />
+                    </div>
+                </form>
+                <Link to="/cadastro">
+                    <Paragrafo conteudo="Não tem uma conta? Cadastre-se!" />
+                </Link>
             </Container>
         );
     }
