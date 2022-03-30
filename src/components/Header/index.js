@@ -1,15 +1,23 @@
+import { useContext } from 'react';
+import ContextUsuario from '../contexts/Usuario';
+
 import Paragrafo from '../utils/Paragrafo';
 
 import { Container } from './style';
 
-import Perfil from './../../assets/img/foto-Perfil.jpg';
-
 function Header() {
+    const { usuario } = useContext(ContextUsuario);
+    console.log(usuario);
+
+    if(usuario === null) {
+        return <></>
+    }
+
     return (
         <Container>
             <Paragrafo conteudo={'TrackIt'} />
             <figure>
-                <img src={Perfil} alt="TrackIt"/>
+                <img src={usuario.image} alt="TrackIt"/>
             </figure>
         </Container>
     );

@@ -76,10 +76,3 @@ function TelaInicial() {
 }
 
 export default TelaInicial;
-
-// eslint-disable-next-line no-lone-blocks
-{/* 
-    {arrayInput.map((item, index) => { 
-        return <input key={index} type="text" placeholder={item} />
-    })}
-*/}
