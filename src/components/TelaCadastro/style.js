@@ -8,7 +8,6 @@ export const Container = styled.section`
     left: 0;
     background-color: rgba(255, 255, 255, 1);
     font-family: 'Lexend Deca', sans-serif;
-    display: none;
 
     figure {
         width: 100%;

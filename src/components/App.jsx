@@ -1,3 +1,5 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Header from "./Header";
 import TelaInicial from "./TelaInicial";
 import TelaCadastro from "./TelaCadastro";
@@ -10,14 +12,16 @@ import "./../assets/css/reset.css";
 
 function App() {
     return (
-        <>
+        <BrowserRouter>
             <Header />
-            <TelaInicial />
-            <TelaCadastro /> 
-            <TelaHabitos />
-            <TelaHistorico />
-            <HabitosHoje />
-        </> 
+            <Routes>
+                <Route path="/" element={<TelaInicial />} />
+                <Route path="/cadastro" element={<TelaCadastro />} />
+                <Route path="/habitos" element={<TelaHabitos />} />
+                <Route path="/hoje" element={<HabitosHoje />} />
+                <Route path="/historico" element={<TelaHistorico />} />
+            </Routes>
+        </BrowserRouter> 
     );
 }
 
