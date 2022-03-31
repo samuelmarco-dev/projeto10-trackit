@@ -20,6 +20,7 @@ function TelaHabitos() {
     const [nomeHabito, setNomeHabito] = useState('');
 
     const [diasSelecionados, setDiasSelecionados] = useState([]);
+    const [disable, setDisable] = useState(false);
       
     useEffect(() => {
         listarHabitosUsuario();
@@ -52,35 +53,53 @@ function TelaHabitos() {
         }
     }
 
-    function criarNovoHabito ( ) {
+    function criarNovoHabito () {
         if(tokenUsuario !== null) {
-            const promise = postCriarHabitos({name: nomeHabito, days: [1, 3, 5]}, tokenUsuario)
-            promise.then(response => {
-                console.log(response.data);
-                setNomeHabito('');
-                setMostrarForm(false);
-                listarHabitosUsuario ();
-            })
-            .catch((error) => {
-                console.log(error);
-                swal(`Erro ao criar hábito, status: ${error.response.status}`);
-                setNomeHabito('');
-            })
+            setDisable(true);
+            const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, tokenUsuario)
+            if(nomeHabito === '' || diasSelecionados.length === 0){
+                swal('Preencha todos os campos e selecione pelo menos um dia!');
+            }else{
+                promise.then(response => {
+                    console.log(response.data);
+                    setNomeHabito('');
+                    setDiasSelecionados([]);
+                    setDisable(false);
+                    setMostrarForm(false);
+                    listarHabitosUsuario ();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    swal(`Erro ao criar hábito, status: ${error.response.status}`);
+                    setNomeHabito('');
+                    setDiasSelecionados([]);
+                    setDisable(false);
+                })
+            }
         }else{
+            setDisable(true);
             const token = localStorage.getItem('token');
             console.log(token);
             const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, token)
-            promise.then(response => {
-                console.log(response.data);
-                setNomeHabito('');
-                setMostrarForm(false);
-                listarHabitosUsuario ();
-            })
-            .catch((error) => {
-                console.log(error);
-                swal(`Erro ao criar hábito, status: ${error.response.status}`);
-                setNomeHabito('');
-            })
+            if(nomeHabito === '' || diasSelecionados.length === 0){
+                swal('Preencha todos os campos e selecione pelo menos um dia!');
+            }else{
+                promise.then(response => {
+                    console.log(response.data);
+                    setNomeHabito('');
+                    setDiasSelecionados([]);
+                    setDisable(false);
+                    setMostrarForm(false);
+                    listarHabitosUsuario ();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    swal(`Erro ao criar hábito, status: ${error.response.status}`);
+                    setNomeHabito('');
+                    setDiasSelecionados([]);
+                    setDisable(false);
+                })
+            }
         }
     }
 
@@ -120,17 +139,17 @@ function TelaHabitos() {
           });
     }
 
-    function gerarDiasSemana( ){
+    function gerarDiasSemana(){
         return (
             <div className='botoes'>
             {arrayDias.map((dia, index) => {
                 if(diasSelecionados.includes(index)){
                     return(
-                        <Botao key={index} classe='selecionado' conteudo={dia} click={()=>listaDeDias(index)} />
+                        <Botao key={index} classe='selecionado' conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
                     )
                 }
                 return (
-                    <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)}/>
+                    <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
                 )
             })}
             </div>
@@ -165,12 +184,13 @@ function TelaHabitos() {
                     {
                         (mostrarForm === false) ? <></> : 
                             <div className='painel-habitos'>
-                                <input type="text" placeholder='nome do hábito' value={nomeHabito}
-                                required onChange={(e)=>setNomeHabito(e.target.value)}/>
+                                <input type="text" placeholder='nome do hábito' value={nomeHabito} disabled={disable}
+                                onChange={(e)=>setNomeHabito(e.target.value)}/>
                                 {gerarDiasSemana()}
                                 <div className='acoes-habitos'>
                                     <span onClick={()=>{setMostrarForm(false)}}>Cancelar</span>
-                                    <Botao classe='avancar' conteudo='Salvar' tipo="submit" click={()=>criarNovoHabito()}/>
+                                    <Botao classe='avancar' conteudo='Salvar' tipo="submit" disabled={disable}
+                                    click={()=>criarNovoHabito()}/>
                                 </div>
                             </div>
                     }
@@ -183,7 +203,6 @@ function TelaHabitos() {
                                     {
                                         <div className='botoes'>
                                         {arrayDias.map((dia, index) => {
-                                            // console.log(days)
                                             if(days.includes(index)){
                                                 return (
                                                     <Botao key={index} classe={'selecionado'} conteudo={dia} />
