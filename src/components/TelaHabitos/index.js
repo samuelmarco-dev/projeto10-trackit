@@ -16,10 +16,10 @@ function TelaHabitos() {
     const {tokenUsuario} = useContext(ContextToken);
 
     const [mostrarForm, setMostrarForm] = useState(false);
-    const [diasSelecionados, setDiasSelecionados] = useState(false);
-
     const [habitos, setHabitos] = useState([]);
     const [nomeHabito, setNomeHabito] = useState('');
+
+    const [diasSelecionados, setDiasSelecionados] = useState([]);
       
     useEffect(() => {
         listarHabitosUsuario();
@@ -52,11 +52,9 @@ function TelaHabitos() {
         }
     }
 
-    function criarNovoHabito ( event ) {
-        event.preventDefault();
-        
+    function criarNovoHabito ( ) {
         if(tokenUsuario !== null) {
-            const promise = postCriarHabitos({name: "Nome do hábito",days: [1, 3, 5]}, tokenUsuario)
+            const promise = postCriarHabitos({name: nomeHabito, days: [1, 3, 5]}, tokenUsuario)
             promise.then(response => {
                 console.log(response.data);
                 setNomeHabito('');
@@ -71,7 +69,7 @@ function TelaHabitos() {
         }else{
             const token = localStorage.getItem('token');
             console.log(token);
-            const promise = postCriarHabitos({name: "Nome do hábito", days: [1, 3, 5]}, token)
+            const promise = postCriarHabitos({name: nomeHabito, days: [0, 1, 3, 5]}, token)
             promise.then(response => {
                 console.log(response.data);
                 setNomeHabito('');
@@ -122,25 +120,34 @@ function TelaHabitos() {
           });
     }
 
-
-    function gerarDiasSemana(){
+    function gerarDiasSemana( ){
         return (
             <div className='botoes'>
             {arrayDias.map((dia, index) => {
-                const css = 'selecionado';
-                if(diasSelecionados === false) {
-                    return (
-                        <Botao key={index} classe={''} conteudo={dia} click={()=>setDiasSelecionados(true)}/>
-                    )
-                }else{
-                    return (
-                        <Botao key={index} classe={css} conteudo={dia} click={()=>setDiasSelecionados(false)}/>
-                    )
-                }
+                return (
+                    <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)}/>
+                )
             })}
             </div>
         )
     }
+
+    // function listaDeDias (index){
+    //     if(diasSelecionados.includes(index)){
+    //         const novoArray = diasSelecionados.filter(
+    //             (dia) => {
+    //                 return dia !== index;
+    //             }
+    //         );
+    //         setDiasSelecionados(novoArray);
+    //         console.log(diasSelecionados);
+    //         console.log(novoArray);
+    //     }   
+    //     else{
+    //         setDiasSelecionados([...diasSelecionados, index]);
+    //         console.log(diasSelecionados);
+    //     }
+    // }
 
     return ( 
         <Container>
@@ -154,25 +161,37 @@ function TelaHabitos() {
                 <article>
                     {
                         (mostrarForm === false) ? <></> : 
-                        <form onSubmit={criarNovoHabito}>
                             <div className='painel-habitos'>
                                 <input type="text" placeholder='nome do hábito' value={nomeHabito}
                                 required onChange={(e)=>setNomeHabito(e.target.value)}/>
                                 {gerarDiasSemana()}
                                 <div className='acoes-habitos'>
                                     <span onClick={()=>setMostrarForm(false)}>Cancelar</span>
-                                    <Botao classe='avancar' conteudo='Salvar' tipo="submit"/>
+                                    <Botao classe='avancar' conteudo='Salvar' tipo="submit" click={()=>criarNovoHabito()}/>
                                 </div>
                             </div>
-                        </form>
                     }
                     {habitos.length > 0 ?
                         habitos.map((habito) => {
-                            const {name, id} = habito;
+                            const {name, id, days} = habito;
                             return (
                                 <div key={id} className='habitos-criados'>
                                     <Paragrafo classe="topo-habito" conteudo={name} />
-                                        {gerarDiasSemana()}
+                                    {
+                                        <div className='botoes'>
+                                        {arrayDias.map((dia, index) => {
+                                            // console.log(days)
+                                            if(days.includes(index)){
+                                                return (
+                                                    <Botao key={index} classe={'selecionado'} conteudo={dia} />
+                                                )
+                                            }
+                                            return (
+                                                <Botao key={index} classe={''} conteudo={dia} />
+                                            )
+                                        })}
+                                        </div>
+                                    }
                                     <figure onClick={()=>removerHabito(id)}>
                                         <BsTrash className='icon'/>
                                     </figure>
