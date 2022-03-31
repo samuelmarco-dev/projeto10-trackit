@@ -10,10 +10,10 @@ function Footer(props) {
 
     return (  
         <footer>
-            <Link to="/">
+            <Link to="/habitos">
                 <Paragrafo conteudo='Hábitos' />
             </Link>
-            <Link to="/">
+            <Link to="/hoje">
                 <div>
                     <CircularProgressbar className='progressbar'
                         value={progresso}
@@ -28,7 +28,7 @@ function Footer(props) {
                     })} />
                 </div>
             </Link>
-            <Link to="/">
+            <Link to="/historico">
                 <Paragrafo conteudo='Histórico' />
             </Link>
         </footer>
