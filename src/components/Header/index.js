@@ -10,7 +10,15 @@ function Header() {
     console.log(usuario);
 
     if(usuario === null) {
-        return <></>
+        const image = localStorage.getItem('image');
+        return (
+            <Container>
+                <Paragrafo conteudo={'TrackIt'} />
+                <figure>
+                    <img src={image} alt="TrackIt"/>
+                </figure>
+            </Container>
+        );
     }
 
     return (

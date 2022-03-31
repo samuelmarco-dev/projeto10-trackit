@@ -30,6 +30,10 @@ function TelaCadastro() {
             console.log(response.data);
             setDisable(true);
             setUsuario(response.data);
+            localStorage.setItem('name', response.data.name);
+            localStorage.setItem('email', response.data.email);
+            localStorage.setItem('id', response.data.id);
+            localStorage.setItem('image', response.data.image);
             navigate('/');
         })
         .catch((error) => {
