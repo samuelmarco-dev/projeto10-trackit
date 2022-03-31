@@ -126,6 +126,12 @@ export const Container = styled.section`
         background-color: rgba(255, 255, 255, 1);
     }
 
+    .botoes button.selecionado {
+        color: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(207, 207, 207, 1);
+        background-color: rgba(207, 207, 207, 1);
+    }
+
     article .painel-habitos .acoes-habitos {
         width: 100%;
         height: 35px;
