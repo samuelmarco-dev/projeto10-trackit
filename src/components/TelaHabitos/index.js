@@ -69,7 +69,7 @@ function TelaHabitos() {
         }else{
             const token = localStorage.getItem('token');
             console.log(token);
-            const promise = postCriarHabitos({name: nomeHabito, days: [0, 1, 3, 5]}, token)
+            const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, token)
             promise.then(response => {
                 console.log(response.data);
                 setNomeHabito('');
@@ -124,6 +124,11 @@ function TelaHabitos() {
         return (
             <div className='botoes'>
             {arrayDias.map((dia, index) => {
+                if(diasSelecionados.includes(index)){
+                    return(
+                        <Botao key={index} classe='selecionado' conteudo={dia} click={()=>listaDeDias(index)} />
+                    )
+                }
                 return (
                     <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)}/>
                 )
@@ -132,22 +137,20 @@ function TelaHabitos() {
         )
     }
 
-    // function listaDeDias (index){
-    //     if(diasSelecionados.includes(index)){
-    //         const novoArray = diasSelecionados.filter(
-    //             (dia) => {
-    //                 return dia !== index;
-    //             }
-    //         );
-    //         setDiasSelecionados(novoArray);
-    //         console.log(diasSelecionados);
-    //         console.log(novoArray);
-    //     }   
-    //     else{
-    //         setDiasSelecionados([...diasSelecionados, index]);
-    //         console.log(diasSelecionados);
-    //     }
-    // }
+    function listaDeDias (index){
+        console.log(index);
+
+        if(diasSelecionados.includes(index)){
+            setDiasSelecionados(diasSelecionados.filter((diaClicadoNovamente) => {
+                //deixa no array somente os dias que não foram clicados pela segunda vez
+                return diaClicadoNovamente !== index; 
+            }));
+        }
+        else{
+            setDiasSelecionados([...diasSelecionados, index]);
+        }
+    }
+    console.log(diasSelecionados);
 
     return ( 
         <Container>
@@ -166,7 +169,7 @@ function TelaHabitos() {
                                 required onChange={(e)=>setNomeHabito(e.target.value)}/>
                                 {gerarDiasSemana()}
                                 <div className='acoes-habitos'>
-                                    <span onClick={()=>setMostrarForm(false)}>Cancelar</span>
+                                    <span onClick={()=>{setMostrarForm(false)}}>Cancelar</span>
                                     <Botao classe='avancar' conteudo='Salvar' tipo="submit" click={()=>criarNovoHabito()}/>
                                 </div>
                             </div>
@@ -187,7 +190,7 @@ function TelaHabitos() {
                                                 )
                                             }
                                             return (
-                                                <Botao key={index} classe={''} conteudo={dia} />
+                                                <Botao key={index} conteudo={dia} />
                                             )
                                         })}
                                         </div>
