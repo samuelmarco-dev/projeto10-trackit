@@ -168,11 +168,11 @@ export const Container = styled.section`
         width: 100%;
         height: auto;
         max-height: 90px;
-        /* padding: 15px 15px; */
         background-color: rgba(255, 255, 255, 1);
         border-radius: 5px;
         padding: 14px 18px;
         position: relative;
+        margin-bottom: 10px;
     }
 
     article .habitos-criados .topo-habito {
