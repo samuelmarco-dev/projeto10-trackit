@@ -8,6 +8,7 @@ import { Container } from "./style";
 
 import { getHabitosHoje, postHabitoFeito, postDesmarcarHabitoFeito } from '../services/dataAxios';
 import ContextToken from '../contexts/Token';
+import ContextProgressoUsuario from '../contexts/Progress';
 
 import { ImCheckboxChecked } from 'react-icons/im';
 import 'dayjs/locale/pt-br';
@@ -25,6 +26,8 @@ function HabitosHoje() {
     const { tokenUsuario } = useContext(ContextToken);
     const tokenLocal = localStorage.getItem('token');
 
+    const {setProgressoUsuario, progressoUsuario} = useContext(ContextProgressoUsuario);
+    // console.log(progressoUsuario);
     const [habitosHoje, setHabitosHoje] = useState([]);
 
     useEffect(() => {
@@ -59,10 +62,14 @@ function HabitosHoje() {
     function toggleHabito(habito){
         const {done} = habito;
         if(done === true){
-            return <ImCheckboxChecked className={'icon concluido'} onClick={()=>desmarcarHabitosFeito(habito)} />
+            return <ImCheckboxChecked className={'icon concluido'} onClick={()=>{
+                desmarcarHabitosFeito(habito);
+            }} />
         }
         if(done === false){
-            return <ImCheckboxChecked className={'icon'} onClick={()=>marcarHabitosFeito(habito)} />
+            return <ImCheckboxChecked className={'icon'} onClick={()=>{
+                marcarHabitosFeito(habito);
+            }} />
         }
     }
     
@@ -83,6 +90,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
+                atualizarProgresso();
             })
             .catch(error => {
                 console.log(error.response);
@@ -98,6 +106,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
+                
             })
             .catch(error => {
                 console.log(error.response);
@@ -108,6 +117,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
+                regredirProgresso();
             })
             .catch(error => {
                 console.log(error.response);
@@ -115,44 +125,88 @@ function HabitosHoje() {
         }
     }
 
+    function atualizarProgresso(){
+        const promise = getHabitosHoje(tokenLocal);
+        promise.then(response => {
+            console.log(response.data);
+            setTimeout(()=>{
+                if(response.data.length > 0){
+                    let progresso = 0;
+                    // eslint-disable-next-line array-callback-return
+                    response.data.map((habito)=>{
+                        if(habito.done === true){
+                            progresso++;
+                        }
+                    })
+                    console.log(Math.abs((progresso/response.data.length)*100));
+                    // let resultado = Math.abs((progresso/response.data.length)*100);
+                    setProgressoUsuario(Math.abs((progresso/response.data.length)*100));
+                }
+            }, 1000);
+        })
+    }
+
+    function regredirProgresso(){
+        const promise = getHabitosHoje(tokenLocal);
+        promise.then(response => {
+            console.log(response.data);
+            setTimeout(()=>{
+                if(response.data.length > 0){
+                    let progresso = 0;
+                    // eslint-disable-next-line array-callback-return
+                    response.data.map((habito)=>{
+                        if(habito.done === true){
+                            progresso--;
+                        }
+                    })
+                    console.log(Math.abs((progresso/response.data.length)*100));
+                    // let resultado = Math.abs((progresso/response.data.length)*100)
+                    setProgressoUsuario(Math.abs((progresso/response.data.length))*100);
+                }
+            }, 1000);
+        })
+    }
+
     return ( 
         <Container>
-            <div className='topo-container'>
-                <Paragrafo classe="data" conteudo={retornaData()} />
-                <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />
-            </div>
-            <article>
-                {habitosHoje.length > 0 ?
-                    // eslint-disable-next-line array-callback-return
-                    habitosHoje.map((habito) => {
-                        const { id, name, currentSequence, highestSequence } = habito;
-                        return (
-                            <div className='painel-habitosHoje' key={id}>
-                                <div className="descricao">
-                                    <Paragrafo classe="habito" conteudo={name} />
-                                    {currentSequence > 0 ? 
-                                        <Paragrafo classe="sequencia" conteudo={`Sequência atual: ${currentSequence} dia(s)`} />
-                                    : 
-                                        <Paragrafo classe="sequencia" conteudo={"Sequência atual: Ainda não!"} />
-                                    }
-                                    {highestSequence > 0 ? 
-                                        <Paragrafo classe="recorde" conteudo={`Seu recorde: ${highestSequence} dia(s)`} />
-                                    : 
-                                        <Paragrafo classe="recorde" conteudo={"Seu recorde: Ainda não!"} />
-                                    }
+            <nav>
+                <div className='topo-container'>
+                    <Paragrafo classe="data" conteudo={retornaData()} />
+                    <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />
+                </div>
+                <article>
+                    {habitosHoje.length > 0 ?
+                        // eslint-disable-next-line array-callback-return
+                        habitosHoje.map((habito) => {
+                            const { id, name, currentSequence, highestSequence } = habito;
+                            return (
+                                <div className='painel-habitosHoje' key={id}>
+                                    <div className="descricao">
+                                        <Paragrafo classe="habito" conteudo={name} />
+                                        {currentSequence > 0 ? 
+                                            <Paragrafo classe="sequencia" conteudo={`Sequência atual: ${currentSequence} dia(s)`} />
+                                        : 
+                                            <Paragrafo classe="sequencia" conteudo={"Sequência atual: Ainda não!"} />
+                                        }
+                                        {highestSequence > 0 ? 
+                                            <Paragrafo classe="recorde" conteudo={`Seu recorde: ${highestSequence} dia(s)`} />
+                                        : 
+                                            <Paragrafo classe="recorde" conteudo={"Seu recorde: Ainda não!"} />
+                                        }
+                                    </div>
+                                    <figure>
+                                        {toggleHabito(habito)}
+                                    </figure>
                                 </div>
-                                <figure>
-                                    {toggleHabito(habito)}
-                                </figure>
-                            </div>
-                        )
-                    }) 
-                    :  
-                    <Paragrafo classe="habito-ausente" conteudo="Você não tem nenhum hábito cadastrado para hoje. 
-                    Adicione um hábito agora mesmo clicando em Hábitos e comece a trackear!" />
-                }
-            </article>
-            <Footer texto="Hoje" progresso={50}/>
+                            )
+                        }) 
+                        :  
+                        <Paragrafo classe="habito-ausente" conteudo="Você não tem nenhum hábito cadastrado para hoje. 
+                        Adicione um hábito agora mesmo clicando em Hábitos e comece a trackear!" />
+                    }
+                </article>
+            </nav>
+            <Footer texto="Hoje" progresso={progressoUsuario}/>
         </Container>
     );
 }

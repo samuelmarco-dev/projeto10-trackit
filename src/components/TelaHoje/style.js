@@ -39,6 +39,12 @@ export const Container = styled.section`
         color: rgba(186, 186, 186, 1);
     }
 
+    nav{
+        width: 100%;
+        height: calc(100% - 70px - 100px);
+        overflow-y: scroll;
+    }
+
     article{
         padding: 0 18px;
     }
