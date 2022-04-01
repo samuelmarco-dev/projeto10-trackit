@@ -7,7 +7,7 @@ import Footer from '../Footer';
 
 import swal from 'sweetalert';
 import { Container } from './style';
-import ContextProgressoUsuario from '../contexts/Progress';
+import { ThreeDots } from 'react-loader-spinner';
 
 import { BsTrash } from 'react-icons/bs';
 import { getListarHabitos, postCriarHabitos, deletarHabito } from '../services/dataAxios';
@@ -22,9 +22,8 @@ function TelaHabitos() {
 
     const [diasSelecionados, setDiasSelecionados] = useState([]);
     const [disable, setDisable] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    const {progressoUsuario} = useContext(ContextProgressoUsuario);
-      
     useEffect(() => {
         listarHabitosUsuario();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,6 +56,7 @@ function TelaHabitos() {
     }
 
     function criarNovoHabito () {
+        setLoading(true);
         if(tokenUsuario !== null) {
             setDisable(true);
             const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, tokenUsuario)
@@ -77,6 +77,7 @@ function TelaHabitos() {
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
+                    setLoading(false);
                 })
             }
         }else{
@@ -101,6 +102,7 @@ function TelaHabitos() {
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
+                    setLoading(false);
                 })
             }
         }
@@ -192,8 +194,10 @@ function TelaHabitos() {
                                 {gerarDiasSemana()}
                                 <div className='acoes-habitos'>
                                     <span onClick={()=>{setMostrarForm(false)}}>Cancelar</span>
-                                    <Botao classe='avancar' conteudo='Salvar' tipo="submit" disabled={disable}
-                                    click={()=>criarNovoHabito()}/>
+                                    {!loading ? <Botao classe='avancar' conteudo='Salvar' tipo="submit" disabled={disable}
+                                    click={()=>criarNovoHabito()}/> : <Botao classe='avancar' 
+                                    conteudo={<ThreeDots color="#fff" height={13} />} tipo="submit" disabled={disable} click={()=>criarNovoHabito()}/>
+                                    }
                                 </div>
                             </div>
                     }
@@ -229,7 +233,7 @@ function TelaHabitos() {
                     }
                 </article>
             </nav> 
-            <Footer texto="Hoje" progresso={progressoUsuario}/>
+            <Footer texto="Hoje" progresso={localStorage.getItem('progresso')}/>
         </Container>
     );
 }

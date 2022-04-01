@@ -9,11 +9,13 @@ import Botao from "../utils/Botao";
 import Paragrafo from "../utils/Paragrafo";
 import TrackIt from "./../../assets/img/logo-TrackIt.jpg";
 
+import { ThreeDots } from 'react-loader-spinner';
 import { Container } from "./style";
 
 function TelaCadastro() {
     const arrayInput = ['email', 'senha', 'nome', 'foto'];
     
+    const [loading, setLoading] = useState(false);
     const [disable, setDisable] = useState(false);
     const [dadosCadastro, setDadosCadastro] = useState({
         email: '', name: '', image: '', password: '' 
@@ -24,7 +26,9 @@ function TelaCadastro() {
 
     function postarDadosCadastro(event) {
         event.preventDefault();
-        
+        setDisable(true);
+        setLoading(true);
+
         const promise = postCadastro(dadosCadastro);
         promise.then(response => {
             console.log(response.data);
@@ -34,6 +38,7 @@ function TelaCadastro() {
             localStorage.setItem('email', response.data.email);
             localStorage.setItem('id', response.data.id);
             localStorage.setItem('image', response.data.image);
+            localStorage.setItem('progresso', 0);
             navigate('/');
         })
         .catch((error) => {
@@ -41,6 +46,8 @@ function TelaCadastro() {
             setDadosCadastro({
                 email: '', name: '', image: '', password: ''
             });
+            setDisable(false);
+            setLoading(false);
         });
     }
 
@@ -65,7 +72,9 @@ function TelaCadastro() {
                     onChange={(e)=>setDadosCadastro({...dadosCadastro, image: e.target.value})}/>
                 </div>
                 <div className="botao">
-                    <Botao conteudo="Cadastrar" tipo="submit" disabled={disable}/>
+                    {!loading ? <Botao conteudo="Cadastrar" tipo="submit" disabled={disable}/> :
+                        <Botao conteudo={<ThreeDots color="#fff" height={13} />} tipo="submit" disabled={disable}/>
+                    }
                 </div>
             </form>
             <Link to="/">

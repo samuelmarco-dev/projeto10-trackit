@@ -68,6 +68,10 @@ export const Container = styled.section`
         text-align: center;
         color: rgba(255, 255, 255, 1);
         background-color: rgba(82, 182, 255, 1);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     p {

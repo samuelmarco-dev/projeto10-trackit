@@ -9,6 +9,7 @@ import ContextToken from "../contexts/Token";
 import Botao from "../utils/Botao";
 import Paragrafo from "../utils/Paragrafo";
 
+import { ThreeDots } from 'react-loader-spinner';
 import { Container } from "./style";
 
 import TrackIt from "./../../assets/img/logo-TrackIt.jpg";
@@ -16,6 +17,7 @@ import TrackIt from "./../../assets/img/logo-TrackIt.jpg";
 function TelaInicial() {
     const arrayInput = ['email', 'senha'];
 
+    const [loading, setLoading] = useState(false);
     const [disable, setDisable] = useState(false);
     const [dadosEntrada, setDadosEntrada] = useState({
         email: '', password: ''
@@ -27,11 +29,12 @@ function TelaInicial() {
 
     function postarDadosLogin(event) {
         event.preventDefault();
+        setDisable(true);
+        setLoading(true);
 
         const promise = postLogin(dadosEntrada);
         promise.then(response => {
             console.log(response.data);
-            setDisable(true);
             setUsuario(response.data);
             setTokenUsuario(response.data.token);
             localStorage.setItem('token', response.data.token);
@@ -39,6 +42,7 @@ function TelaInicial() {
             localStorage.setItem('email', response.data.email);
             localStorage.setItem('id', response.data.id);
             localStorage.setItem('image', response.data.image);
+            localStorage.setItem('progresso', 0);
             navigate('/hoje');
         })
         .catch((error) => {
@@ -46,6 +50,8 @@ function TelaInicial() {
             setDadosEntrada({
                 email: '', password: ''
             });
+            setDisable(false);
+            setLoading(false);
         });
     }
 
@@ -64,7 +70,9 @@ function TelaInicial() {
                         onChange={(e)=>setDadosEntrada({...dadosEntrada, password: e.target.value})}/>
                     </div>
                     <div className="botao">
-                        <Botao conteudo="Entrar" tipo="submit" disabled={disable}/>
+                        {!loading ? <Botao conteudo="Entrar" tipo="submit" disabled={disable}/> :
+                            <Botao conteudo={<ThreeDots color="#fff" height={13} />} tipo="submit" disabled={disable}/>
+                        }
                     </div>
                 </form>
                 <Link to="/cadastro">

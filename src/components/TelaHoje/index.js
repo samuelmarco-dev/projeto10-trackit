@@ -26,7 +26,7 @@ function HabitosHoje() {
     const { tokenUsuario } = useContext(ContextToken);
     const tokenLocal = localStorage.getItem('token');
 
-    const {setProgressoUsuario, progressoUsuario} = useContext(ContextProgressoUsuario);
+    const {setProgressoUsuario} = useContext(ContextProgressoUsuario);
     const [habitosHoje, setHabitosHoje] = useState([]);
 
     useEffect(() => {
@@ -80,6 +80,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
+                progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
@@ -89,7 +90,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
-                atualizarProgresso();
+                progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
@@ -105,6 +106,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
+                progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
@@ -115,7 +117,7 @@ function HabitosHoje() {
             promise.then(response => {
                 console.log(response.data);
                 listarHabitosHoje();
-                regredirProgresso();
+                progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
@@ -123,49 +125,28 @@ function HabitosHoje() {
         }
     }
 
-    function atualizarProgresso(){
-        const promise = getHabitosHoje(tokenLocal);
-        promise.then(response => {
-            console.log(response.data);
+    function progressoGenerico(){
+        if(tokenUsuario !== null) {
+            const promise = getHabitosHoje(tokenUsuario)
+            promise.then(response => {
+                const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
+                setProgressoUsuario(habitosFiltrados*100);
+                localStorage.setItem('progresso', habitosFiltrados*100);
+            }).catch(error => {
+                console.log(error);
+                swal('Erro ao listar os seus hábitos!');
+            });
+        }
+        else{
+            const promise = getHabitosHoje(tokenLocal);
+            promise.then(response => {
+                console.log(response.data);
                 if(response.data.length > 0){
-                    let progresso = 0;
-                    // eslint-disable-next-line array-callback-return
-                    response.data.map((habito)=>{
-                        if(habito.done === true){
-                            progresso++;
-                        }
-                    })
-                    console.log(Math.abs((progresso/response.data.length)*100));
-                    // let resultado = Math.abs((progresso/response.data.length)*100);
-                    setProgressoUsuario(Math.abs((progresso/response.data.length)*100));
+                    const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
+                    setProgressoUsuario(habitosFiltrados*100);
+                    localStorage.setItem('progresso', habitosFiltrados*100);
                 }
-        })
-    }
-
-    function regredirProgresso(){
-        const promise = getHabitosHoje(tokenLocal);
-        promise.then(response => {
-            console.log(response.data);
-                if(response.data.length > 0){
-                    let progresso = 0;
-                    // eslint-disable-next-line array-callback-return
-                    response.data.map((habito)=>{
-                        if(habito.done === true){
-                            progresso--;
-                        }
-                    })
-                    console.log(Math.abs((progresso/response.data.length)*100));
-                    // let resultado = Math.abs((progresso/response.data.length)*100)
-                    setProgressoUsuario(Math.abs((progresso/response.data.length))*100);
-                }
-        })
-    }
-
-    function gerarSubtitulo(){
-        if(progressoUsuario === 0){
-            return <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />
-        }else{
-            return <Paragrafo classe="progresso-dia concluido" conteudo={`${progressoUsuario}% dos hábitos concluídos`} />
+            })
         }
     }
 
@@ -174,7 +155,9 @@ function HabitosHoje() {
             <nav>
                 <div className='topo-container'>
                     <Paragrafo classe="data" conteudo={retornaData()} />
-                    {gerarSubtitulo()}
+                    {localStorage.getItem('progresso') > 0 ? 
+                    <Paragrafo classe="progresso-dia concluido" conteudo={`${localStorage.getItem('progresso')}% dos hábitos concluídos`} 
+                    /> : <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />}
                 </div>
                 <article>
                     {habitosHoje.length > 0 ?
@@ -211,7 +194,7 @@ function HabitosHoje() {
                     }
                 </article>
             </nav>
-            <Footer texto="Hoje" progresso={progressoUsuario}/>
+            <Footer texto="Hoje" progresso={localStorage.getItem('progresso')}/>
         </Container>
     );
 }
