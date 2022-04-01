@@ -107,7 +107,10 @@ export const Container = styled.section`
     .icon {
         font-size: 40px;
         color: rgba(235, 235, 235, 1);
-        /* color: rgba(143, 197, 73, 1); */
+    }
+    
+    .icon.concluido{
+        color: rgba(143, 197, 73, 1);
     }
 
     footer {
@@ -149,5 +152,20 @@ export const Container = styled.section`
         height: 91px;
         position: absolute;
         bottom: 10px;
+    }
+
+    article .habito-ausente {
+        width: 100%;
+        height: auto;
+        max-height: 120px;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 22px;
+        letter-spacing: 0em;
+        color: rgba(102, 102, 102, 1);
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
     }
 `;
