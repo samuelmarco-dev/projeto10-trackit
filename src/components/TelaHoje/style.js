@@ -39,6 +39,10 @@ export const Container = styled.section`
         color: rgba(186, 186, 186, 1);
     }
 
+    .topo-container .progresso-dia.concluido {
+        color: rgba(143, 197, 73, 1);
+    }
+
     nav{
         width: 100%;
         height: calc(100% - 70px - 100px);
@@ -173,5 +177,9 @@ export const Container = styled.section`
         display: flex;
         flex-wrap: wrap;
         overflow: hidden;
+    }
+
+    .atualizado{
+        color: rgba(143, 197, 73, 1);
     }
 `;

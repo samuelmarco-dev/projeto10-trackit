@@ -7,6 +7,7 @@ import Footer from '../Footer';
 
 import swal from 'sweetalert';
 import { Container } from './style';
+import ContextProgressoUsuario from '../contexts/Progress';
 
 import { BsTrash } from 'react-icons/bs';
 import { getListarHabitos, postCriarHabitos, deletarHabito } from '../services/dataAxios';
@@ -21,6 +22,8 @@ function TelaHabitos() {
 
     const [diasSelecionados, setDiasSelecionados] = useState([]);
     const [disable, setDisable] = useState(false);
+
+    const {progressoUsuario} = useContext(ContextProgressoUsuario);
       
     useEffect(() => {
         listarHabitosUsuario();
@@ -226,7 +229,7 @@ function TelaHabitos() {
                     }
                 </article>
             </nav> 
-            <Footer texto="Hoje" progresso={50}/>
+            <Footer texto="Hoje" progresso={progressoUsuario}/>
         </Container>
     );
 }
