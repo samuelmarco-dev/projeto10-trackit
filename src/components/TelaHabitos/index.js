@@ -35,7 +35,16 @@ function TelaHabitos() {
             const promise = getListarHabitos(tokenUsuario)
             promise.then(response => {
                 console.log(response.data);
-                setHabitos(response.data);     
+                const { data } = response;
+                const arr = [];
+                // eslint-disable-next-line array-callback-return
+                data.map((item)=>{
+                    if(item.days.length > 0){
+                        arr.push(item);
+                    }
+                })
+                console.log(arr);
+                setHabitos(arr);
             }).catch(error => {
                 console.log(error);
                 swal('Erro ao listar os seus hábitos!');
@@ -47,7 +56,16 @@ function TelaHabitos() {
             const promise = getListarHabitos(token)    
             promise.then(response => {
                 console.log(response.data);
-                setHabitos(response.data);
+                const { data } = response;
+                const arr = [];
+                // eslint-disable-next-line array-callback-return
+                data.map((item)=>{
+                    if(item.days.length > 0){
+                        arr.push(item);
+                    }
+                })
+                console.log(arr);
+                setHabitos(arr);
             }).catch(error => {
                 console.log(error);
                 swal('Erro ao listar os seus hábitos!');
@@ -56,18 +74,24 @@ function TelaHabitos() {
     }
 
     function criarNovoHabito () {
-        setLoading(true);
         if(tokenUsuario !== null) {
             setDisable(true);
+            setLoading(true);
             const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, tokenUsuario)
             if(nomeHabito === '' || diasSelecionados.length === 0){
                 swal('Preencha todos os campos e selecione pelo menos um dia!');
+                setTimeout(() => {
+                    setDisable(false);
+                    setLoading(false);
+                } , 1500);
+                return;
             }else{
                 promise.then(response => {
                     console.log(response.data);
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
+                    setLoading(false);
                     setMostrarForm(false);
                     listarHabitosUsuario ();
                 })
@@ -82,17 +106,24 @@ function TelaHabitos() {
             }
         }else{
             setDisable(true);
+            setLoading(true);
             const token = localStorage.getItem('token');
             console.log(token);
             const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, token)
             if(nomeHabito === '' || diasSelecionados.length === 0){
                 swal('Preencha todos os campos e selecione pelo menos um dia!');
+                setTimeout(() => {
+                    setDisable(false);
+                    setLoading(false);
+                } , 1500);
+                return;
             }else{
                 promise.then(response => {
                     console.log(response.data);
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
+                    setLoading(false);
                     setMostrarForm(false);
                     listarHabitosUsuario ();
                 })
