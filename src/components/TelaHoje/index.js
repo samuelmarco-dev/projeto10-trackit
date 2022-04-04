@@ -156,7 +156,7 @@ function HabitosHoje() {
                 <div className='topo-container'>
                     <Paragrafo classe="data" conteudo={retornaData()} />
                     {localStorage.getItem('progresso') > 0 ? 
-                    <Paragrafo classe="progresso-dia concluido" conteudo={`${localStorage.getItem('progresso')}% dos hábitos concluídos`} 
+                    <Paragrafo classe="progresso-dia concluido" conteudo={`${Number(localStorage.getItem('progresso')).toFixed(2)}% dos hábitos concluídos`} 
                     /> : <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />}
                 </div>
                 <article>
