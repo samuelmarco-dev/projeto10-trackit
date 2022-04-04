@@ -1,11 +1,9 @@
 # Projeto - TrackIt
 <p align="center">
     <img src="./src/assets/img/telas/login-Cadastro.jpg" width="250" height="250"/>
-<p>
-<img src="./src/assets/img/telas/habitos.jpg"/>
-<p align="center">
     <img src="./src/assets/img/telas/hoje.jpg" width="250" height="250"/>
 <p>
+<img src="./src/assets/img/telas/habitos.jpg"/>
 
 ## Requisitos do projeto
 
