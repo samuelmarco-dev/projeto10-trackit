@@ -1,8 +1,11 @@
 # Projeto - TrackIt
-
-![<img src="./src/assets/img/telas/login-Cadastro.jpg" width="200" height="200"/>](./src/assets/img/telas/login-Cadastro.jpg)
-![<img src="./src/assets/img/telas/habitos.jpg" width="200" height="200"/>](./src/assets/img/telas/habitos.jpg)
-![<img src="./src/assets/img/telas/hoje.jpg" width="200" height="200"/>](./src/assets/img/telas/hoje.jpg)
+<p align="center">
+    <img src="./src/assets/img/telas/login-Cadastro.jpg" width="250" height="250"/>
+<p>
+<img src="./src/assets/img/telas/habitos.jpg"/>
+<p align="center">
+    <img src="./src/assets/img/telas/hoje.jpg" width="250" height="250"/>
+<p>
 
 ## Requisitos do projeto
 
