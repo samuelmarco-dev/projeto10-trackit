@@ -31,7 +31,6 @@ function TelaHabitos() {
 
     function listarHabitosUsuario (){
         if(tokenUsuario !== null) {
-            console.log(tokenUsuario);
             const promise = getListarHabitos(tokenUsuario)
             promise.then(response => {
                 const { data } = response;
@@ -148,7 +147,6 @@ function TelaHabitos() {
                     })
                 }else{
                     const token = localStorage.getItem('token');
-                    console.log(token);
                     const promise = deletarHabito(id, token)
                     promise.then(response => {
                         listarHabitosUsuario ();

@@ -76,7 +76,6 @@ function HabitosHoje() {
                 progressoGenerico();
             })
             .catch(error => {
-                console.log(error.response);
                 swal('Erro ao marcar o hábito como feito! Status: ' + error.response.status);
             })
         }else{
@@ -86,7 +85,6 @@ function HabitosHoje() {
                 progressoGenerico();
             })
             .catch(error => {
-                console.log(error.response);
                 swal('Erro ao marcar o hábito como feito! Status: ' + error.response.status);
             })
         }
@@ -136,7 +134,6 @@ function HabitosHoje() {
         else{
             const promise = getHabitosHoje(tokenLocal);
             promise.then(response => {
-                console.log(response.data);
                 if(response.data.length > 0){
                     const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
                     setProgressoUsuario(habitosFiltrados*100);
@@ -165,7 +162,6 @@ function HabitosHoje() {
                         // eslint-disable-next-line array-callback-return
                         habitosHoje.map((habito) => {
                             const { id, name, currentSequence, highestSequence, done } = habito;
-                            console.log(habito);
                             return (
                                 <div className='painel-habitosHoje' key={id}>
                                     <div className="descricao">
