@@ -34,7 +34,6 @@ function TelaHabitos() {
             console.log(tokenUsuario);
             const promise = getListarHabitos(tokenUsuario)
             promise.then(response => {
-                console.log(response.data);
                 const { data } = response;
                 const arr = [];
                 // eslint-disable-next-line array-callback-return
@@ -43,19 +42,15 @@ function TelaHabitos() {
                         arr.push(item);
                     }
                 })
-                console.log(arr);
                 setHabitos(arr);
             }).catch(error => {
-                console.log(error);
                 swal('Erro ao listar os seus hábitos!');
             });
 
         }else{
             const token = localStorage.getItem('token');
-            console.log(token);
             const promise = getListarHabitos(token)    
             promise.then(response => {
-                console.log(response.data);
                 const { data } = response;
                 const arr = [];
                 // eslint-disable-next-line array-callback-return
@@ -64,10 +59,8 @@ function TelaHabitos() {
                         arr.push(item);
                     }
                 })
-                console.log(arr);
                 setHabitos(arr);
             }).catch(error => {
-                console.log(error);
                 swal('Erro ao listar os seus hábitos!');
             });
         }
@@ -83,11 +76,10 @@ function TelaHabitos() {
                 setTimeout(() => {
                     setDisable(false);
                     setLoading(false);
-                } , 1500);
+                } , 1200);
                 return;
             }else{
                 promise.then(response => {
-                    console.log(response.data);
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
@@ -96,7 +88,6 @@ function TelaHabitos() {
                     listarHabitosUsuario ();
                 })
                 .catch((error) => {
-                    console.log(error);
                     swal(`Erro ao criar hábito, status: ${error.response.status}`);
                     setNomeHabito('');
                     setDiasSelecionados([]);
@@ -108,18 +99,16 @@ function TelaHabitos() {
             setDisable(true);
             setLoading(true);
             const token = localStorage.getItem('token');
-            console.log(token);
             const promise = postCriarHabitos({name: nomeHabito, days: [...diasSelecionados]}, token)
             if(nomeHabito === '' || diasSelecionados.length === 0){
                 swal('Preencha todos os campos e selecione pelo menos um dia!');
                 setTimeout(() => {
                     setDisable(false);
                     setLoading(false);
-                } , 1500);
+                } , 1200);
                 return;
             }else{
                 promise.then(response => {
-                    console.log(response.data);
                     setNomeHabito('');
                     setDiasSelecionados([]);
                     setDisable(false);
@@ -128,7 +117,6 @@ function TelaHabitos() {
                     listarHabitosUsuario ();
                 })
                 .catch((error) => {
-                    console.log(error);
                     swal(`Erro ao criar hábito, status: ${error.response.status}`);
                     setNomeHabito('');
                     setDiasSelecionados([]);
@@ -153,22 +141,20 @@ function TelaHabitos() {
                 if(tokenUsuario !== null) {
                     const promise = deletarHabito(id, tokenUsuario)
                     promise.then(response => {
-                        console.log(response.data);
                         listarHabitosUsuario ();
                     })
                     .catch((error) => {
-                        console.log(error);
+                         swal(`Erro ao remover hábito, status: ${error.response.status}`);                   
                     })
                 }else{
                     const token = localStorage.getItem('token');
                     console.log(token);
                     const promise = deletarHabito(id, token)
                     promise.then(response => {
-                        console.log(response.data);
                         listarHabitosUsuario ();
                     })
                     .catch((error) => {
-                        console.log(error);
+                        swal(`Erro ao remover hábito, status: ${error.response.status}`);                        
                     })
                 }
             }
@@ -178,23 +164,21 @@ function TelaHabitos() {
     function gerarDiasSemana(){
         return (
             <div className='botoes'>
-            {arrayDias.map((dia, index) => {
-                if(diasSelecionados.includes(index)){
-                    return(
-                        <Botao key={index} classe='selecionado' conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
+                {arrayDias.map((dia, index) => {
+                    if(diasSelecionados.includes(index)){
+                        return(
+                            <Botao key={index} classe='selecionado' conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
+                        )
+                    }
+                    return (
+                        <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
                     )
-                }
-                return (
-                    <Botao key={index} classe={''} conteudo={dia} click={()=>listaDeDias(index)} disabled={disable}/>
-                )
-            })}
+                })}
             </div>
         )
     }
 
     function listaDeDias (index){
-        console.log(index);
-
         if(diasSelecionados.includes(index)){
             setDiasSelecionados(diasSelecionados.filter((diaClicadoNovamente) => {
                 //deixa no array somente os dias que não foram clicados pela segunda vez
@@ -205,7 +189,6 @@ function TelaHabitos() {
             setDiasSelecionados([...diasSelecionados, index]);
         }
     }
-    console.log(diasSelecionados);
 
     return ( 
         <Container>

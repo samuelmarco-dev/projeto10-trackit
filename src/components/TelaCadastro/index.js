@@ -31,8 +31,6 @@ function TelaCadastro() {
 
         const promise = postCadastro(dadosCadastro);
         promise.then(response => {
-            console.log(response.data);
-            setDisable(true);
             setUsuario(response.data);
             localStorage.setItem('name', response.data.name);
             localStorage.setItem('email', response.data.email);

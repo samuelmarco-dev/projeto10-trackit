@@ -38,25 +38,19 @@ function HabitosHoje() {
         if(tokenUsuario !== null) {
             const promise = getHabitosHoje(tokenUsuario)
             promise.then(response => {
-                console.log(response.data);
                 setHabitosHoje(response.data);
             }).catch(error => {
-                console.log(error);
                 swal('Erro ao listar os seus hábitos!');
             });
         } else{
             const promise = getHabitosHoje(tokenLocal)
             promise.then(response => {
-                console.log(response.data);
                 setHabitosHoje(response.data);
             }).catch(error => {
-                console.log(error);
                 swal('Erro ao listar os seus hábitos!');
             });
         }
     }
-
-    console.log(habitosHoje);
 
     function toggleHabito(habito){
         const {done} = habito;
@@ -78,22 +72,22 @@ function HabitosHoje() {
         if(tokenUsuario !== null) {
             const promise = postHabitoFeito(id, tokenUsuario, {done: true});
             promise.then(response => {
-                console.log(response.data);
                 listarHabitosHoje();
                 progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
+                swal('Erro ao marcar o hábito como feito! Status: ' + error.response.status);
             })
         }else{
             const promise = postHabitoFeito(id, tokenLocal, {done: true});
             promise.then(response => {
-                console.log(response.data);
                 listarHabitosHoje();
                 progressoGenerico();
             })
             .catch(error => {
                 console.log(error.response);
+                swal('Erro ao marcar o hábito como feito! Status: ' + error.response.status);
             })
         }
     }
@@ -104,37 +98,39 @@ function HabitosHoje() {
         if(tokenUsuario !== null) {
             const promise = postDesmarcarHabitoFeito(id, tokenUsuario, {done: false});
             promise.then(response => {
-                console.log(response.data);
                 listarHabitosHoje();
                 progressoGenerico();
             })
             .catch(error => {
-                console.log(error.response);
+                swal('Erro ao desmarcar o hábito! Status: ' + error.response.status);
             })
         }
         else{
             const promise = postDesmarcarHabitoFeito(id, tokenLocal, {done: false});
             promise.then(response => {
-                console.log(response.data);
                 listarHabitosHoje();
                 progressoGenerico();
             })
             .catch(error => {
-                console.log(error.response);
+                swal('Erro ao desmarcar o hábito! Status: ' + error.response.status);
             })
         }
     }
 
     function progressoGenerico(){
         if(tokenUsuario !== null) {
-            const promise = getHabitosHoje(tokenUsuario)
+            const promise = getHabitosHoje(tokenUsuario);
             promise.then(response => {
-                const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
-                setProgressoUsuario(habitosFiltrados*100);
-                localStorage.setItem('progresso', habitosFiltrados*100);
+                if(response.data.length > 0){
+                    const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
+                    setProgressoUsuario(habitosFiltrados*100);
+                    localStorage.setItem('progresso', habitosFiltrados*100);
+                }else{
+                    setProgressoUsuario(0);
+                    localStorage.setItem('progresso', 0);
+                }
             }).catch(error => {
-                console.log(error);
-                swal('Erro ao listar os seus hábitos!');
+                swal('Erro ao listar os seus hábitos! Status: ' + error.response.status);
             });
         }
         else{
@@ -145,8 +141,13 @@ function HabitosHoje() {
                     const habitosFiltrados = response.data.filter(habito => habito.done).length/response.data.length;
                     setProgressoUsuario(habitosFiltrados*100);
                     localStorage.setItem('progresso', habitosFiltrados*100);
+                }else{
+                    setProgressoUsuario(0);
+                    localStorage.setItem('progresso', 0);
                 }
-            })
+            }).catch(error => {
+                swal('Erro ao listar os seus hábitos! Status: ' + error.response.status);
+            });
         }
     }
 
@@ -163,13 +164,14 @@ function HabitosHoje() {
                     {habitosHoje.length > 0 ?
                         // eslint-disable-next-line array-callback-return
                         habitosHoje.map((habito) => {
-                            const { id, name, currentSequence, highestSequence } = habito;
+                            const { id, name, currentSequence, highestSequence, done } = habito;
+                            console.log(habito);
                             return (
                                 <div className='painel-habitosHoje' key={id}>
                                     <div className="descricao">
                                         <Paragrafo classe="habito" conteudo={name} />
-                                        {currentSequence > 0 ? 
-                                            <p className='sequencia'>{'Sequência atual: '}<span className={'atualizado'}>
+                                        {currentSequence > 0 ?
+                                            <p className='sequencia'>{'Sequência atual: '}<span className={done === true ? 'atualizado' : ''}>
                                                 {`${currentSequence} dia(s)`}</span></p>
                                         : 
                                             <Paragrafo classe="sequencia progresso" conteudo={"Sequência atual: Ainda não!"} />

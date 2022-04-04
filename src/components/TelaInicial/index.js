@@ -34,7 +34,6 @@ function TelaInicial() {
 
         const promise = postLogin(dadosEntrada);
         promise.then(response => {
-            console.log(response.data);
             setUsuario(response.data);
             setTokenUsuario(response.data.token);
             localStorage.setItem('token', response.data.token);
@@ -42,7 +41,6 @@ function TelaInicial() {
             localStorage.setItem('email', response.data.email);
             localStorage.setItem('id', response.data.id);
             localStorage.setItem('image', response.data.image);
-            localStorage.setItem('progresso', 0);
             navigate('/hoje');
         })
         .catch((error) => {
