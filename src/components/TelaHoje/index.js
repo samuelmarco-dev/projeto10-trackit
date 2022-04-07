@@ -31,8 +31,7 @@ function HabitosHoje() {
 
     useEffect(() => {
         listarHabitosHoje();
-        progressoGenerico();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function listarHabitosHoje() {
@@ -40,6 +39,7 @@ function HabitosHoje() {
             const promise = getHabitosHoje(tokenUsuario)
             promise.then(response => {
                 setHabitosHoje(response.data);
+                progressoGenerico();
             }).catch(error => {
                 swal('Erro ao listar os seus hábitos!');
             });

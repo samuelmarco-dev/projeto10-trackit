@@ -151,7 +151,6 @@ export const Container = styled.section`
         width: auto;
         height: 70px;
         position: relative;
-        background-color: red;
         display: flex;
         justify-content: center;
         align-items: center;
