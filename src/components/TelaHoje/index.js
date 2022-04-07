@@ -47,6 +47,7 @@ function HabitosHoje() {
             const promise = getHabitosHoje(tokenLocal)
             promise.then(response => {
                 setHabitosHoje(response.data);
+                progressoGenerico();
             }).catch(error => {
                 swal('Erro ao listar os seus hábitos!');
             });
