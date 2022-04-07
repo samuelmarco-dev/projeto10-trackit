@@ -26,7 +26,7 @@ function HabitosHoje() {
     const { tokenUsuario } = useContext(ContextToken);
     const tokenLocal = localStorage.getItem('token');
 
-    const {setProgressoUsuario} = useContext(ContextProgressoUsuario);
+    const {setProgressoUsuario, progressoUsuario} = useContext(ContextProgressoUsuario);
     const [habitosHoje, setHabitosHoje] = useState([]);
 
     useEffect(() => {
@@ -154,8 +154,8 @@ function HabitosHoje() {
             <nav>
                 <div className='topo-container'>
                     <Paragrafo classe="data" conteudo={retornaData()} />
-                    {localStorage.getItem('progresso') > 0 ? 
-                    <Paragrafo classe="progresso-dia concluido" conteudo={`${Number(localStorage.getItem('progresso')).toFixed(2)}% dos hábitos concluídos`} 
+                    {progressoUsuario > 0 ? 
+                    <Paragrafo classe="progresso-dia concluido" conteudo={`${Number(progressoUsuario).toFixed(2)}% dos hábitos concluídos`} 
                     /> : <Paragrafo classe="progresso-dia" conteudo="Nenhum hábito concluído ainda" />}
                 </div>
                 <article>
@@ -193,7 +193,7 @@ function HabitosHoje() {
                     }
                 </article>
             </nav>
-            <Footer texto="Hoje" progresso={localStorage.getItem('progresso')}/>
+            <Footer texto="Hoje" progresso={progressoUsuario}/>
         </Container>
     );
 }

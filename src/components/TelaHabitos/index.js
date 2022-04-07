@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import ContextToken from '../contexts/Token';
+import ContextProgressoUsuario from "../contexts/Progress";
 
 import Paragrafo from '../utils/Paragrafo';
 import Botao from '../utils/Botao';
@@ -15,6 +16,7 @@ import { getListarHabitos, postCriarHabitos, deletarHabito } from '../services/d
 function TelaHabitos() {
     const arrayDias = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
     const {tokenUsuario} = useContext(ContextToken);
+    const {progressoUsuario} = useContext(ContextProgressoUsuario);
 
     const [mostrarForm, setMostrarForm] = useState(false);
     const [habitos, setHabitos] = useState([]);
@@ -245,7 +247,7 @@ function TelaHabitos() {
                     }
                 </article>
             </nav> 
-            <Footer texto="Hoje" progresso={localStorage.getItem('progresso')}/>
+            <Footer texto="Hoje" progresso={progressoUsuario}/>
         </Container>
     );
 }
